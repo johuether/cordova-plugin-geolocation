@@ -122,7 +122,7 @@
         __highAccuracyEnabled = enableHighAccuracy;
         if([[NSBundle mainBundle] objectForInfoDictionaryKey:@"NSLocationWhenInUseUsageDescription"]){
             [self.locationManager requestWhenInUseAuthorization];
-        } else if([[NSBundle mainBundle] objectForInfoDictionaryKey:@"NSLocationAlwaysUsageDescription"]) {
+        } else if([[NSBundle mainBundle] objectForInfoDictionaryKey:@"NSLocationAlwaysAndWhenInUseUsageDescription"]) {
             [self.locationManager  requestAlwaysAuthorization];
         } else {
             NSLog(@"[Warning] No NSLocationAlwaysUsageDescription or NSLocationWhenInUseUsageDescription key is defined in the Info.plist file.");
@@ -135,8 +135,6 @@
     // first stop, and then start the updating to ensure we get at least one
     // update, even if our location did not change.
     [self.locationManager stopUpdatingLocation];
-    [self.locationManager startUpdatingLocation];
-    __locationStarted = YES;
     if (enableHighAccuracy) {
         __highAccuracyEnabled = YES;
         // Set distance filter to 5 for a high accuracy. Setting it to "kCLDistanceFilterNone" could provide a
@@ -149,6 +147,8 @@
         self.locationManager.distanceFilter = 10;
         self.locationManager.desiredAccuracy = kCLLocationAccuracyThreeKilometers;
     }
+    [self.locationManager startUpdatingLocation];
+    __locationStarted = YES;
 }
 
 - (void)_stopLocation
